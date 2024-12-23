@@ -27,7 +27,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: 1.21
+          go-version: 1.23.3
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v4
@@ -38,3 +38,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LDFLAGS: ${{ steps.prepare.outputs.ldflags }}
+
+      - name: Upload Extra File
+        run: |
+          TAG=${{ env.GITHUB_REF_NAME }} make generate
+          gh release upload "$TAG" config/capkk/infrastructure-components.yaml --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

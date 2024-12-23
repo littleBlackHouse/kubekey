@@ -1,0 +1,9 @@
+---
+- name: Set custom hosts to /etc/hosts
+  when: and .kubernetes.control_plane_endpoint.local.etc_hosts (.kubernetes.control_plane_endpoint.local.etc_hosts | ne "")
+  command: |
+    cat >> /etc/hosts <<EOF
+    # Custom by kubekey begin
+    {{ .kubernetes.control_plane_endpoint.local.etc_hosts }}
+    # Custom by kubekey end
+    EOF
